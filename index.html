@@ -1,22 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rust Skins Shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Rust Skin Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background: #1c1c1c; color: white; font-family: sans-serif; text-align: center; }
-        .skin-card { border: 1px solid #333; padding: 10px; margin: 10px; border-radius: 8px; }
-        button { background: #cd412b; color: white; border: none; padding: 10px; border-radius: 5px; }
+        :root {
+            --bg-color: #1c1c1e;
+            --card-bg: #2c2c2e;
+            --main-color: #3b82f6; /* Синій як на скрінах */
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 10px;
+            padding-bottom: 80px; /* Місце для кнопки кошика */
+        }
+
+        .header {
+            padding: 10px;
+            text-align: left;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .btn-add {
+            background: var(--main-color);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Кнопка кошика внизу */
+        .cart-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            background: var(--main-color);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            display: none; /* З'явиться коли додамо товар */
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
     </style>
 </head>
 <body>
-    <h1>Rust Skin Shop</h1>
-    <div class="skin-card">
-        <h3>LR-300 | Tactical</h3>
-        <p>Ціна: 5.00$</p>
-        <button onclick="Telegram.WebApp.showAlert('Ви обрали скін!')">Купити</button>
+
+    <div class="header">Скини Rust</div>
+
+    <div class="grid">
+        <div class="card">
+            <img src="https://files.facepunch.com/rust/item/rifle.lr300_512.png" alt="Skin">
+            <h3>Сет бджілки</h3>
+            <div class="price">790 грн.</div>
+            <button class="btn-add" onclick="addToCart('Сет бджілки', 790)">До кошика</button>
+        </div>
+
+        <div class="card">
+            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Skin">
+            <h3>Сет жабки</h3>
+            <div class="price">300 грн.</div>
+            <button class="btn-add" onclick="addToCart('Сет жабки', 300)">До кошика</button>
+        </div>
     </div>
+
+    <div id="cart-widget" class="cart-btn" onclick="openCart()">
+        Кошик (<span id="count">0</span>)
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let cart = [];
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            document.getElementById('count').innerText = cart.length;
+            document.getElementById('cart-widget').style.display = 'block';
+            
+            // Легка вібрація при натисканні (працює в ТГ)
+            tg.HapticFeedback.impactOccurred('medium');
+        }
+
+        function openCart() {
+            tg.showAlert("Тут буде перехід до оформлення замовлення!");
+        }
+    </script>
 </body>
 </html>
