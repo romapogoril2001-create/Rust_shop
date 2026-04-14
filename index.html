@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Skins Shop</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: #1c1c1c; color: white; font-family: sans-serif; text-align: center; }
+        .skin-card { border: 1px solid #333; padding: 10px; margin: 10px; border-radius: 8px; }
+        button { background: #cd412b; color: white; border: none; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Rust Skin Shop</h1>
+    <div class="skin-card">
+        <h3>LR-300 | Tactical</h3>
+        <p>Ціна: 5.00$</p>
+        <button onclick="Telegram.WebApp.showAlert('Ви обрали скін!')">Купити</button>
+    </div>
+</body>
+</html>
