@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Rust Skin Shop</title>
+    <title>Evo Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -70,7 +70,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 20 (px);
             box-sizing: border-box;
         }
 
@@ -78,10 +78,10 @@
             background: var(--card-gray);
             padding: 25px;
             border-radius: 24px;
-            text-align: center; /* Центруємо текст всередині картки */
+            text-align: center;
             width: 100%;
             max-width: 320px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .card-number {
@@ -92,18 +92,19 @@
             font-size: 18px;
             font-weight: 700;
             color: var(--accent-blue);
+            letter-spacing: 1px;
         }
 
-        /* КНОПКА ПОСЕРЕДИНІ */
+        /* КНОПКА ПО ЦЕНТРУ */
         .btn-manager {
             background: var(--main-green);
             color: white;
             border: none;
             padding: 14px;
-            width: 80%;
+            width: 85%;
             border-radius: 12px;
             font-weight: 700;
-            margin: 15px auto; /* 'auto' зліва і справа вирівнює по центру */
+            margin: 15px auto; /* Центрування */
             text-decoration: none;
             display: block;
             text-align: center;
@@ -115,6 +116,7 @@
             color: var(--text-gray);
             margin-top: 10px;
             cursor: pointer;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -124,16 +126,28 @@
 
     <div class="grid">
         <div class="card">
-            <img src="https://community.cloudflare.steamstatic.com/economy/image/6ng8vS_K06CWh7ZeGvT8pTOf8nN8pDM6W464T6C-_G3j9W4vGvT8pTOf8nN8pDM6W464T6C-pBq9W4vGvT8pTOf8nN8pDM6W464T6C-uGq9W4v" alt="Heat Seeker">
-            <h3>Heat Seeker AR</h3>
-            <div class="price">250 грн</div>
-            <button class="btn-add" onclick="addItem('Heat Seeker AR', 250)">В кошик</button>
+            <img src="https://files.facepunch.com/rust/item/hoodie.bee_512.png" alt="Сет бджілки">
+            <h3>Сет бджілки</h3>
+            <div class="price">790 грн</div>
+            <button class="btn-add" onclick="addItem('Сет бджілки', 790)">До кошика</button>
         </div>
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Frog Mask">
-            <h3>Frog Mask Set</h3>
+            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Сет жабки">
+            <h3>Сет жабки</h3>
             <div class="price">300 грн</div>
-            <button class="btn-add" onclick="addItem('Frog Mask Set', 300)">В кошик</button>
+            <button class="btn-add" onclick="addItem('Сет жабки', 300)">До кошика</button>
+        </div>
+        <div class="card">
+            <img src="https://files.facepunch.com/rust/item/wood.armor.jacket_512.png" alt="Кофейний сет сонечка">
+            <h3>Кофейний сет сонечка</h3>
+            <div class="price">520 грн</div>
+            <button class="btn-add" onclick="addItem('Кофейний сет сонечка', 520)">До кошика</button>
+        </div>
+        <div class="card">
+            <img src="https://files.facepunch.com/rust/item/metal.facemask_512.png" alt="МВК Сет сонечка">
+            <h3>МВК Сет сонечка</h3>
+            <div class="price">640 грн</div>
+            <button class="btn-add" onclick="addItem('МВК Сет сонечка', 640)">До кошика</button>
         </div>
     </div>
 
@@ -150,7 +164,7 @@
             
             <p id="final-price" style="font-weight: 800; font-size: 20px; margin: 10px 0;"></p>
             
-            <p style="font-size: 11px; color: var(--text-gray); margin-bottom: 5px;">Після оплати надішліть чек:</p>
+            <p style="font-size: 11px; color: var(--text-gray); margin-bottom: 5px;">Після оплати надішліть чек менеджеру:</p>
             
             <a href="https://t.me/roma_r3343" class="btn-manager">Надіслати чек</a>
             
@@ -190,3 +204,4 @@
     </script>
 </body>
 </html>
+
