@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Rust Shop</title>
+    <title>Rust Skin Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg-dark: #0f1012;
             --card-gray: #1c1e22;
             --accent-blue: #3b82f6;
+            --main-green: #22c55e;
             --text-main: #ffffff;
             --text-gray: #9ca3af;
         }
@@ -23,7 +24,7 @@
             padding-bottom: 120px;
         }
 
-        .header { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
+        .header { font-size: 24px; font-weight: 800; margin-bottom: 20px; text-align: left; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .card {
@@ -60,7 +61,7 @@
             font-weight: 800;
         }
 
-        /* Окно оплаты */
+        /* Модальне вікно оплати */
         #payment-modal {
             display: none;
             position: fixed;
@@ -77,10 +78,10 @@
             background: var(--card-gray);
             padding: 25px;
             border-radius: 24px;
-            text-align: center;
+            text-align: center; /* Центруємо текст всередині картки */
             width: 100%;
             max-width: 320px;
-            border: 1px solid var(--accent-blue);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .card-number {
@@ -90,20 +91,19 @@
             margin: 15px 0;
             font-size: 18px;
             font-weight: 700;
-            letter-spacing: 0.5px;
             color: var(--accent-blue);
         }
 
-        /* Виправлена кнопка менеджера: зміщена вліво */
+        /* КНОПКА ПОСЕРЕДИНІ */
         .btn-manager {
-            background: #22c55e;
+            background: var(--main-green);
             color: white;
             border: none;
             padding: 14px;
-            width: 70%; /* Зменшена ширина */
+            width: 80%;
             border-radius: 12px;
             font-weight: 700;
-            margin: 10px 0; /* Прибираємо 'auto', щоб вона не центрувалась */
+            margin: 15px auto; /* 'auto' зліва і справа вирівнює по центру */
             text-decoration: none;
             display: block;
             text-align: center;
@@ -113,7 +113,7 @@
             background: none;
             border: none;
             color: var(--text-gray);
-            margin-top: 15px;
+            margin-top: 10px;
             cursor: pointer;
         }
     </style>
@@ -127,13 +127,13 @@
             <img src="https://community.cloudflare.steamstatic.com/economy/image/6ng8vS_K06CWh7ZeGvT8pTOf8nN8pDM6W464T6C-_G3j9W4vGvT8pTOf8nN8pDM6W464T6C-pBq9W4vGvT8pTOf8nN8pDM6W464T6C-uGq9W4v" alt="Heat Seeker">
             <h3>Heat Seeker AR</h3>
             <div class="price">250 грн</div>
-            <button class="btn-add" onclick="addItem('Heat Seeker AR', 250)">До кошика</button>
+            <button class="btn-add" onclick="addItem('Heat Seeker AR', 250)">В кошик</button>
         </div>
         <div class="card">
             <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Frog Mask">
             <h3>Frog Mask Set</h3>
             <div class="price">300 грн</div>
-            <button class="btn-add" onclick="addItem('Frog Mask Set', 300)">До кошика</button>
+            <button class="btn-add" onclick="addItem('Frog Mask Set', 300)">В кошик</button>
         </div>
     </div>
 
@@ -143,11 +143,14 @@
 
     <div id="payment-modal">
         <div class="payment-card">
-            <h2 style="margin-top: 0;">Оплата</h2>
+            <h2 style="margin: 0 0 10px 0;">Оплата</h2>
             <p style="color: var(--text-gray); font-size: 14px;">Перекажіть суму на карту:</p>
+            
             <div class="card-number">4441 1100 8094 2150</div>
+            
             <p id="final-price" style="font-weight: 800; font-size: 20px; margin: 10px 0;"></p>
-            <p style="font-size: 11px; color: var(--text-gray); margin-bottom: 15px; text-align: left;">Після оплати надішліть чек менеджеру:</p>
+            
+            <p style="font-size: 11px; color: var(--text-gray); margin-bottom: 5px;">Після оплати надішліть чек:</p>
             
             <a href="https://t.me/roma_r3343" class="btn-manager">Надіслати чек</a>
             
