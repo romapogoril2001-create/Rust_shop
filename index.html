@@ -7,10 +7,11 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #1c1c1e;
-            --card-bg: #2c2c2e;
-            --main-color: #3b82f6; /* Синій як на скрінах */
+            --bg-color: #0f1012;
+            --card-bg: #1c1e22;
+            --main-color: #3b82f6;
             --text-color: #ffffff;
+            --secondary-text: #94a3b8;
         }
 
         body {
@@ -18,46 +19,57 @@
             color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: 10px;
-            padding-bottom: 80px; /* Місце для кнопки кошика */
+            padding: 16px;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
         }
 
         .header {
-            padding: 10px;
-            text-align: left;
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
         }
 
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
 
         .card {
             background: var(--card-bg);
             border-radius: 20px;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card img {
             width: 100%;
-            border-radius: 15px;
-            margin-bottom: 10px;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            border-radius: 14px;
+            background: #131416;
+            margin-bottom: 8px;
         }
 
         .card h3 {
             font-size: 14px;
-            margin: 5px 0;
+            margin: 4px 0;
+            font-weight: 600;
+            height: 34px;
+            overflow: hidden;
         }
 
         .price {
-            font-weight: bold;
-            color: #ccc;
-            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 8px 0;
         }
 
         .btn-add {
@@ -66,70 +78,114 @@
             border: none;
             width: 100%;
             padding: 10px;
-            border-radius: 15px;
-            font-weight: bold;
-            cursor: pointer;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.1s;
         }
 
-        /* Кнопка кошика внизу */
-        .cart-btn {
+        .btn-add:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        /* Кнопка Кошика */
+        .cart-bar {
             position: fixed;
             bottom: 20px;
-            left: 10px;
-            right: 10px;
+            left: 16px;
+            right: 16px;
             background: var(--main-color);
             color: white;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 16px;
+            border-radius: 18px;
             text-align: center;
-            font-weight: bold;
-            display: none; /* З'явиться коли додамо товар */
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+            font-weight: 700;
+            display: none;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); }
+            to { transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">Скини Rust</div>
+    <div class="header">Скіни Rust</div>
 
     <div class="grid">
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/rifle.lr300_512.png" alt="Skin">
-            <h3>Сет бджілки</h3>
-            <div class="price">790 грн.</div>
-            <button class="btn-add" onclick="addToCart('Сет бджілки', 790)">До кошика</button>
+            <img src="https://files.facepunch.com/rust/item/rifle.ak.polymer_512.png" alt="AK-47 Polymer">
+            <h3>AK-47 | Polymer</h3>
+            <div class="price">1500 грн</div>
+            <button class="btn-add" onclick="addToCart('AK-47 Polymer', 1500)">В кошик</button>
         </div>
 
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Skin">
-            <h3>Сет жабки</h3>
-            <div class="price">300 грн.</div>
-            <button class="btn-add" onclick="addToCart('Сет жабки', 300)">До кошика</button>
+            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Сет Жабки">
+            <h3>Frog Mask Set</h3>
+            <div class="price">320 грн</div>
+            <button class="btn-add" onclick="addToCart('Frog Mask Set', 320)">В кошик</button>
+        </div>
+
+        <div class="card">
+            <img src="https://files.facepunch.com/rust/item/rifle.thompson_512.png" alt="Thompson">
+            <h3>Thompson</h3>
+            <div class="price">650 грн</div>
+            <button class="btn-add" onclick="addToCart('Thompson', 650)">В кошик</button>
+        </div>
+
+        <div class="card">
+            <img src="https://files.facepunch.com/rust/item/metal.facemask_512.png" alt="Metal Mask">
+            <h3>Metal Facemask</h3>
+            <div class="price">890 грн</div>
+            <button class="btn-add" onclick="addToCart('Metal Mask', 890)">В кошик</button>
         </div>
     </div>
 
-    <div id="cart-widget" class="cart-btn" onclick="openCart()">
-        Кошик (<span id="count">0</span>)
+    <div id="cart-bar" class="cart-bar" onclick="sendOrder()">
+        Переглянути кошик (<span id="count">0</span>)
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand();
+        tg.expand(); // Розгортаємо на весь екран
 
         let cart = [];
 
         function addToCart(name, price) {
             cart.push({name, price});
-            document.getElementById('count').innerText = cart.length;
-            document.getElementById('cart-widget').style.display = 'block';
             
-            // Легка вібрація при натисканні (працює в ТГ)
+            // Оновлюємо лічильник
+            document.getElementById('count').innerText = cart.length;
+            document.getElementById('cart-bar').style.display = 'block';
+            
+            // Вібровідгук
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        function openCart() {
-            tg.showAlert("Тут буде перехід до оформлення замовлення!");
+        function sendOrder() {
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            let itemsList = cart.map(i => i.name).join(", ");
+
+            tg.showConfirm(`Оформити замовлення: ${itemsList} на суму ${total} грн?`, (ok) => {
+                if (ok) {
+                    // Відправка даних боту
+                    tg.sendData(JSON.stringify({
+                        items: cart,
+                        totalPrice: total
+                    }));
+                }
+            });
         }
+        
+        // Встановлюємо колір шапки додатка під дизайн
+        tg.setHeaderColor('#0f1012');
+        tg.setBackgroundColor('#0f1012');
     </script>
 </body>
 </html>
