@@ -3,32 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Rust Skin Shop</title>
+    <title>Rust Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0f1012;
-            --card-bg: #1c1e22;
-            --main-color: #3b82f6;
-            --text-color: #ffffff;
-            --secondary-text: #94a3b8;
+            --bg-dark: #0f1012;
+            --card-gray: #1c1e22;
+            --accent-blue: #3b82f6;
+            --text-main: #ffffff;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: 16px;
-            padding-bottom: 100px;
-            -webkit-user-select: none;
+            padding: 15px;
+            padding-bottom: 100px; /* Місце під кнопку */
         }
 
         .header {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
+            margin: 10px 0 20px 5px;
         }
 
         .grid {
@@ -38,78 +35,66 @@
         }
 
         .card {
-            background: var(--card-bg);
-            border-radius: 20px;
+            background: var(--card-gray);
+            border-radius: 24px;
             padding: 12px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
         .card img {
             width: 100%;
             aspect-ratio: 1/1;
             object-fit: contain;
-            border-radius: 14px;
+            border-radius: 18px;
             background: #131416;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .card h3 {
             font-size: 14px;
-            margin: 4px 0;
+            margin: 5px 0;
             font-weight: 600;
-            height: 34px;
-            overflow: hidden;
         }
 
         .price {
             font-size: 16px;
             font-weight: 700;
-            color: var(--text-color);
-            margin: 8px 0;
+            margin-bottom: 12px;
         }
 
         .btn-add {
-            background: var(--main-color);
+            background: var(--accent-blue);
             color: white;
             border: none;
             width: 100%;
-            padding: 10px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 15px;
             font-weight: 700;
-            font-size: 13px;
-            transition: all 0.1s;
+            font-size: 14px;
+            cursor: pointer;
         }
 
         .btn-add:active {
-            transform: scale(0.95);
-            opacity: 0.8;
+            transform: scale(0.96);
         }
 
-        /* Кнопка Кошика */
-        .cart-bar {
+        /* Кнопка кошика як в Evo Shop */
+        .cart-float {
             position: fixed;
-            bottom: 20px;
-            left: 16px;
-            right: 16px;
-            background: var(--main-color);
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+            background: var(--accent-blue);
             color: white;
-            padding: 16px;
-            border-radius: 18px;
+            padding: 18px;
+            border-radius: 20px;
             text-align: center;
-            font-weight: 700;
-            display: none;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-            z-index: 1000;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100px); }
-            to { transform: translateY(0); }
+            font-weight: 800;
+            font-size: 16px;
+            display: none; /* З'явиться при додаванні */
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+            z-index: 999;
         }
     </style>
 </head>
@@ -119,73 +104,64 @@
 
     <div class="grid">
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/rifle.ak.polymer_512.png" alt="AK-47 Polymer">
-            <h3>AK-47 | Polymer</h3>
+            <img src="https://files.facepunch.com/rust/item/rifle.ak.polymer_512.png" alt="AK-47">
+            <h3>AK-47 Polymer</h3>
             <div class="price">1500 грн</div>
-            <button class="btn-add" onclick="addToCart('AK-47 Polymer', 1500)">В кошик</button>
+            <button class="btn-add" onclick="addItem('AK-47 Polymer', 1500)">До кошика</button>
         </div>
 
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Сет Жабки">
+            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Frog">
             <h3>Frog Mask Set</h3>
-            <div class="price">320 грн</div>
-            <button class="btn-add" onclick="addToCart('Frog Mask Set', 320)">В кошик</button>
+            <div class="price">350 грн</div>
+            <button class="btn-add" onclick="addItem('Frog Mask Set', 350)">До кошика</button>
         </div>
 
         <div class="card">
             <img src="https://files.facepunch.com/rust/item/rifle.thompson_512.png" alt="Thompson">
             <h3>Thompson</h3>
-            <div class="price">650 грн</div>
-            <button class="btn-add" onclick="addToCart('Thompson', 650)">В кошик</button>
+            <div class="price">700 грн</div>
+            <button class="btn-add" onclick="addItem('Thompson', 700)">До кошика</button>
         </div>
 
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/metal.facemask_512.png" alt="Metal Mask">
+            <img src="https://files.facepunch.com/rust/item/metal.facemask_512.png" alt="Mask">
             <h3>Metal Facemask</h3>
-            <div class="price">890 грн</div>
-            <button class="btn-add" onclick="addToCart('Metal Mask', 890)">В кошик</button>
+            <div class="price">950 грн</div>
+            <button class="btn-add" onclick="addItem('Metal Facemask', 950)">До кошика</button>
         </div>
     </div>
 
-    <div id="cart-bar" class="cart-bar" onclick="sendOrder()">
-        Переглянути кошик (<span id="count">0</span>)
+    <div id="cart-btn" class="cart-float" onclick="finishOrder()">
+        ПЕРЕГЛЯНУТИ КОШИК (<span id="cart-count">0</span>)
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Розгортаємо на весь екран
+        tg.expand();
+        tg.setHeaderColor('#0f1012');
 
         let cart = [];
 
-        function addToCart(name, price) {
+        function addItem(name, price) {
             cart.push({name, price});
             
-            // Оновлюємо лічильник
-            document.getElementById('count').innerText = cart.length;
-            document.getElementById('cart-bar').style.display = 'block';
+            // Оновлюємо кнопку кошика
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-btn').style.display = 'block';
             
-            // Вібровідгук
+            // Вібрація (якщо на телефоні)
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        function sendOrder() {
+        function finishOrder() {
             let total = cart.reduce((sum, item) => sum + item.price, 0);
-            let itemsList = cart.map(i => i.name).join(", ");
-
-            tg.showConfirm(`Оформити замовлення: ${itemsList} на суму ${total} грн?`, (ok) => {
-                if (ok) {
-                    // Відправка даних боту
-                    tg.sendData(JSON.stringify({
-                        items: cart,
-                        totalPrice: total
-                    }));
+            tg.showConfirm(`Оформити замовлення на ${total} грн?`, (confirm) => {
+                if (confirm) {
+                    tg.sendData(JSON.stringify({items: cart, total: total}));
                 }
             });
         }
-        
-        // Встановлюємо колір шапки додатка під дизайн
-        tg.setHeaderColor('#0f1012');
-        tg.setBackgroundColor('#0f1012');
     </script>
 </body>
 </html>
