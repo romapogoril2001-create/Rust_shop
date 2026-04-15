@@ -11,6 +11,7 @@
             --card-gray: #1c1e22;
             --accent-blue: #3b82f6;
             --text-main: #ffffff;
+            --text-gray: #9ca3af;
         }
 
         body {
@@ -19,82 +20,91 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 15px;
-            padding-bottom: 100px; /* Місце під кнопку */
+            padding-bottom: 120px;
         }
 
-        .header {
-            font-size: 24px;
-            font-weight: 800;
-            margin: 10px 0 20px 5px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .header { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .card {
             background: var(--card-gray);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 12px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .card img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-            border-radius: 18px;
-            background: #131416;
-            margin-bottom: 10px;
-        }
-
-        .card h3 {
-            font-size: 14px;
-            margin: 5px 0;
-            font-weight: 600;
-        }
-
-        .price {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 15px; background: #131416; margin-bottom: 10px; }
+        .price { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
 
         .btn-add {
             background: var(--accent-blue);
             color: white;
             border: none;
             width: 100%;
-            padding: 12px;
-            border-radius: 15px;
+            padding: 10px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 14px;
             cursor: pointer;
         }
 
-        .btn-add:active {
-            transform: scale(0.96);
+        .cart-bar {
+            position: fixed;
+            bottom: 20px; left: 15px; right: 15px;
+            background: var(--accent-blue);
+            padding: 16px;
+            border-radius: 18px;
+            display: none;
+            justify-content: center;
+            z-index: 100;
+            font-weight: 800;
         }
 
-        /* Кнопка кошика як в Evo Shop */
-        .cart-float {
+        /* Стилі для вікна оплати */
+        #payment-modal {
+            display: none;
             position: fixed;
-            bottom: 25px;
-            left: 15px;
-            right: 15px;
-            background: var(--accent-blue);
-            color: white;
-            padding: 18px;
-            border-radius: 20px;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .payment-card {
+            background: var(--card-gray);
+            padding: 25px;
+            border-radius: 24px;
             text-align: center;
-            font-weight: 800;
-            font-size: 16px;
-            display: none; /* З'явиться при додаванні */
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-            z-index: 999;
+            width: 100%;
+            max-width: 320px;
+            border: 1px solid var(--accent-blue);
+        }
+
+        .card-number {
+            background: #131416;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--accent-blue);
+        }
+
+        .btn-manager {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+            text-decoration: none;
+            display: block;
         }
     </style>
 </head>
@@ -104,63 +114,63 @@
 
     <div class="grid">
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/rifle.ak.polymer_512.png" alt="AK-47">
-            <h3>AK-47 Heat Seeker AR</h3>
+            <img src="https://community.cloudflare.steamstatic.com/economy/image/6ng8vS_K06CWh7ZeGvT8pTOf8nN8pDM6W464T6C-_G3j9W4vGvT8pTOf8nN8pDM6W464T6C-pBq9W4vGvT8pTOf8nN8pDM6W464T6C-uGq9W4v" alt="Heat Seeker">
+            <h3>Heat Seeker AR</h3>
             <div class="price">250 грн</div>
-            <button class="btn-add" onclick="addItem('AK-47 Heat Seeker AR', 250)">До кошика</button>
+            <button class="btn-add" onclick="addItem('Heat Seeker AR', 250)">До кошика</button>
         </div>
-
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Frog">
+            <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png" alt="Frog Mask">
             <h3>Frog Mask Set</h3>
-            <div class="price">350 грн</div>
-            <button class="btn-add" onclick="addItem('Frog Mask Set', 350)">До кошика</button>
-        </div>
-
-        <div class="card">
-            <img src="https://files.facepunch.com/rust/item/rifle.thompson_512.png" alt="Thompson">
-            <h3>Thompson</h3>
-            <div class="price">700 грн</div>
-            <button class="btn-add" onclick="addItem('Thompson', 700)">До кошика</button>
-        </div>
-
-        <div class="card">
-            <img src="https://files.facepunch.com/rust/item/metal.facemask_512.png" alt="Mask">
-            <h3>Metal Facemask</h3>
-            <div class="price">950 грн</div>
-            <button class="btn-add" onclick="addItem('Metal Facemask', 950)">До кошика</button>
+            <div class="price">300 грн</div>
+            <button class="btn-add" onclick="addItem('Frog Mask Set', 300)">До кошика</button>
         </div>
     </div>
 
-    <div id="cart-btn" class="cart-float" onclick="finishOrder()">
-        ПЕРЕГЛЯНУТИ КОШИК (<span id="cart-count">0</span>)
+    <div id="cart-btn" class="cart-bar" onclick="showConfirmOrder()">
+        ПЕРЕГЛЯНУТИ КОШИК (<span id="count">0</span>)
+    </div>
+
+    <div id="payment-modal">
+        <div class="payment-card">
+            <h2>Оплата замовлення</h2>
+            <p style="color: var(--text-gray)">Перекажіть суму на карту:</p>
+            <div class="card-number">4441 1111 2222 3333</div>
+            <p id="final-price" style="font-weight: 800; font-size: 20px;"></p>
+            <p style="font-size: 12px; color: var(--text-gray); margin-bottom: 20px;">Після оплати натисніть кнопку нижче, щоб надіслати чек менеджеру</p>
+            <a href="https://t.me/rom4ikvadrocuklist" class="btn-manager">Надіслати чек</a>
+            <button onclick="closeModal()" style="background: none; border: none; color: var(--text-gray); margin-top: 15px;">Назад</button>
+        </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        tg.setHeaderColor('#0f1012');
-
         let cart = [];
 
         function addItem(name, price) {
             cart.push({name, price});
-            
-            // Оновлюємо кнопку кошика
-            document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('cart-btn').style.display = 'block';
-            
-            // Вібрація (якщо на телефоні)
+            document.getElementById('count').innerText = cart.length;
+            document.getElementById('cart-btn').style.display = 'flex';
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        function finishOrder() {
+        function showConfirmOrder() {
             let total = cart.reduce((sum, item) => sum + item.price, 0);
-            tg.showConfirm(`Оформити замовлення на ${total} грн?`, (confirm) => {
-                if (confirm) {
-                    tg.sendData(JSON.stringify({items: cart, total: total}));
+            tg.showConfirm(`Оформити замовлення на ${total} грн?`, (ok) => {
+                if (ok) {
+                    showPayment(total);
                 }
             });
+        }
+
+        function showPayment(total) {
+            document.getElementById('final-price').innerText = `Сума: ${total} грн`;
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('payment-modal').style.display = 'none';
         }
     </script>
 </body>
