@@ -25,7 +25,7 @@
             padding-bottom: 120px;
         }
 
-        .header { font-size: 24px; font-weight: 800; margin-bottom: 20px; text-align: left; }
+        .header { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .card {
@@ -60,6 +60,7 @@
             justify-content: center;
             z-index: 100;
             font-weight: 800;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
         /* Стилі модальних вікон */
@@ -91,6 +92,9 @@
             margin: 15px 0;
             max-height: 200px;
             overflow-y: auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 10px 0;
         }
 
         .cart-item {
@@ -98,7 +102,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 14px;
         }
 
         .btn-remove {
@@ -106,6 +110,7 @@
             background: none;
             border: none;
             font-weight: bold;
+            padding: 5px 10px;
             cursor: pointer;
         }
 
@@ -125,10 +130,10 @@
             color: white;
             border: none;
             padding: 14px;
-            width: 90%;
+            width: 100%;
             border-radius: 12px;
             font-weight: 700;
-            margin: 15px auto;
+            margin: 15px 0 5px 0;
             text-decoration: none;
             display: block;
             cursor: pointer;
@@ -140,6 +145,7 @@
             color: var(--text-gray);
             cursor: pointer;
             font-size: 14px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -161,10 +167,16 @@
             <button class="btn-add" onclick="addItem('Сет жабки', 300)">До кошика</button>
         </div>
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/wood.armor.jacket_512.png" alt="Сет сонечка">
-            <h3>Сет сонечка</h3>
+            <img src="https://files.facepunch.com/rust/item/wood.armor.jacket_512.png" alt="Кофейний сет сонечка">
+            <h3>Кофейний сет сонечка</h3>
             <div class="price">520 грн</div>
-            <button class="btn-add" onclick="addItem('Сет сонечка', 520)">До кошика</button>
+            <button class="btn-add" onclick="addItem('Кофейний сет сонечка', 520)">До кошика</button>
+        </div>
+        <div class="card">
+            <img src="https://files.facepunch.com/rust/item/metal.facemask_512.png" alt="МВК Сет сонечка">
+            <h3>МВК Сет сонечка</h3>
+            <div class="price">640 грн</div>
+            <button class="btn-add" onclick="addItem('МВК Сет сонечка', 640)">До кошика</button>
         </div>
     </div>
 
@@ -174,9 +186,10 @@
 
     <div id="cart-modal" class="modal">
         <div class="modal-card">
-            <h2>Ваш кошик</h2>
-            <div id="cart-items-list"></div>
-            <p id="cart-total-price" style="font-weight: 800; font-size: 18px;"></p>
+            <h2 style="margin-top: 0;">Мій кошик</h2>
+            <div id="cart-items-list">
+                </div>
+            <p id="cart-total-price" style="font-weight: 800; font-size: 18px; margin: 10px 0;"></p>
             <button class="btn-main" onclick="goToPayment()">Оформити замовлення</button>
             <button onclick="closeModal('cart-modal')" class="btn-back">Продовжити покупки</button>
         </div>
@@ -184,12 +197,13 @@
 
     <div id="payment-modal" class="modal">
         <div class="modal-card">
-            <h2>Оплата</h2>
+            <h2 style="margin-top: 0;">Оплата</h2>
             <p style="color: var(--text-gray); font-size: 14px;">Перекажіть суму на карту:</p>
             <div class="card-number">4441 1100 8094 2150</div>
-            <p id="final-price" style="font-weight: 800; font-size: 20px;"></p>
+            <p id="final-price" style="font-weight: 800; font-size: 20px; margin: 10px 0;"></p>
+            <p style="font-size: 11px; color: var(--text-gray); margin-bottom: 5px;">Після оплати надішліть чек:</p>
             <a href="https://t.me/roma_r3343" class="btn-main" style="background: var(--main-green);">Надіслати чек</a>
-            <button onclick="closeModal('payment-modal')" class="btn-back">Назад</button>
+            <button onclick="closeModal('payment-modal')" class="btn-back">Назад до кошика</button>
         </div>
     </div>
 
@@ -198,17 +212,20 @@
         tg.expand();
         let cart = [];
 
+        // Додавання товару
         function addItem(name, price) {
             cart.push({name, price});
             updateCartButton();
             tg.HapticFeedback.impactOccurred('medium');
         }
 
+        // Оновлення лічильника на кнопці внизу
         function updateCartButton() {
             document.getElementById('count').innerText = cart.length;
             document.getElementById('cart-btn').style.display = cart.length > 0 ? 'flex' : 'none';
         }
 
+        // Відкриття вікна перегляду кошика
         function openCart() {
             const list = document.getElementById('cart-items-list');
             list.innerHTML = '';
@@ -228,6 +245,7 @@
             document.getElementById('cart-modal').style.display = 'flex';
         }
 
+        // Видалення товару з кошика
         function removeItem(index) {
             cart.splice(index, 1);
             if (cart.length === 0) {
@@ -238,6 +256,7 @@
             updateCartButton();
         }
 
+        // Перехід до оплати
         function goToPayment() {
             let total = cart.reduce((sum, item) => sum + item.price, 0);
             closeModal('cart-modal');
