@@ -11,6 +11,7 @@
             --card-gray: #1c1e22;
             --accent-blue: #3b82f6;
             --main-green: #22c55e;
+            --main-red: #ef4444;
             --text-main: #ffffff;
             --text-gray: #9ca3af;
         }
@@ -61,8 +62,8 @@
             font-weight: 800;
         }
 
-        /* Модальне вікно оплати */
-        #payment-modal {
+        /* Стилі модальних вікон */
+        .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -70,18 +71,42 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 20 (px);
+            padding: 20px;
             box-sizing: border-box;
         }
 
-        .payment-card {
+        .modal-card {
             background: var(--card-gray);
             padding: 25px;
             border-radius: 24px;
-            text-align: center;
             width: 100%;
             max-width: 320px;
             border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        /* Список товарів у кошику */
+        #cart-items-list {
+            text-align: left;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .btn-remove {
+            color: var(--main-red);
+            background: none;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .card-number {
@@ -95,26 +120,24 @@
             letter-spacing: 1px;
         }
 
-        /* КНОПКА ПО ЦЕНТРУ */
-        .btn-manager {
+        .btn-main {
             background: var(--main-green);
             color: white;
             border: none;
             padding: 14px;
-            width: 85%;
+            width: 90%;
             border-radius: 12px;
             font-weight: 700;
-            margin: 15px auto; /* Центрування */
+            margin: 15px auto;
             text-decoration: none;
             display: block;
-            text-align: center;
+            cursor: pointer;
         }
 
         .btn-back {
             background: none;
             border: none;
             color: var(--text-gray);
-            margin-top: 10px;
             cursor: pointer;
             font-size: 14px;
         }
@@ -138,37 +161,35 @@
             <button class="btn-add" onclick="addItem('Сет жабки', 300)">До кошика</button>
         </div>
         <div class="card">
-            <img src="https://files.facepunch.com/rust/item/wood.armor.jacket_512.png" alt="Кофейний сет сонечка">
-            <h3>Кофейний сет сонечка</h3>
+            <img src="https://files.facepunch.com/rust/item/wood.armor.jacket_512.png" alt="Сет сонечка">
+            <h3>Сет сонечка</h3>
             <div class="price">520 грн</div>
-            <button class="btn-add" onclick="addItem('Кофейний сет сонечка', 520)">До кошика</button>
-        </div>
-        <div class="card">
-            <img src="https://files.facepunch.com/rust/item/metal.facemask_512.png" alt="МВК Сет сонечка">
-            <h3>МВК Сет сонечка</h3>
-            <div class="price">640 грн</div>
-            <button class="btn-add" onclick="addItem('МВК Сет сонечка', 640)">До кошика</button>
+            <button class="btn-add" onclick="addItem('Сет сонечка', 520)">До кошика</button>
         </div>
     </div>
 
-    <div id="cart-btn" class="cart-bar" onclick="showConfirmOrder()">
+    <div id="cart-btn" class="cart-bar" onclick="openCart()">
         ПЕРЕГЛЯНУТИ КОШИК (<span id="count">0</span>)
     </div>
 
-    <div id="payment-modal">
-        <div class="payment-card">
-            <h2 style="margin: 0 0 10px 0;">Оплата</h2>
+    <div id="cart-modal" class="modal">
+        <div class="modal-card">
+            <h2>Ваш кошик</h2>
+            <div id="cart-items-list"></div>
+            <p id="cart-total-price" style="font-weight: 800; font-size: 18px;"></p>
+            <button class="btn-main" onclick="goToPayment()">Оформити замовлення</button>
+            <button onclick="closeModal('cart-modal')" class="btn-back">Продовжити покупки</button>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="modal">
+        <div class="modal-card">
+            <h2>Оплата</h2>
             <p style="color: var(--text-gray); font-size: 14px;">Перекажіть суму на карту:</p>
-            
             <div class="card-number">4441 1100 8094 2150</div>
-            
-            <p id="final-price" style="font-weight: 800; font-size: 20px; margin: 10px 0;"></p>
-            
-            <p style="font-size: 11px; color: var(--text-gray); margin-bottom: 5px;">Після оплати надішліть чек менеджеру:</p>
-            
-            <a href="https://t.me/roma_r3343" class="btn-manager">Надіслати чек</a>
-            
-            <button onclick="closeModal()" class="btn-back">Назад</button>
+            <p id="final-price" style="font-weight: 800; font-size: 20px;"></p>
+            <a href="https://t.me/roma_r3343" class="btn-main" style="background: var(--main-green);">Надіслати чек</a>
+            <button onclick="closeModal('payment-modal')" class="btn-back">Назад</button>
         </div>
     </div>
 
@@ -179,29 +200,54 @@
 
         function addItem(name, price) {
             cart.push({name, price});
-            document.getElementById('count').innerText = cart.length;
-            document.getElementById('cart-btn').style.display = 'flex';
+            updateCartButton();
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        function showConfirmOrder() {
-            let total = cart.reduce((sum, item) => sum + item.price, 0);
-            tg.showConfirm(`Оформити замовлення на ${total} грн?`, (ok) => {
-                if (ok) {
-                    showPayment(total);
-                }
-            });
+        function updateCartButton() {
+            document.getElementById('count').innerText = cart.length;
+            document.getElementById('cart-btn').style.display = cart.length > 0 ? 'flex' : 'none';
         }
 
-        function showPayment(total) {
-            document.getElementById('final-price').innerText = `Сума: ${total} грн`;
+        function openCart() {
+            const list = document.getElementById('cart-items-list');
+            list.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>${item.price} грн <button class="btn-remove" onclick="removeItem(${index})">✕</button></span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cart-total-price').innerText = `Разом: ${total} грн`;
+            document.getElementById('cart-modal').style.display = 'flex';
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            if (cart.length === 0) {
+                closeModal('cart-modal');
+            } else {
+                openCart();
+            }
+            updateCartButton();
+        }
+
+        function goToPayment() {
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            closeModal('cart-modal');
+            document.getElementById('final-price').innerText = `До сплати: ${total} грн`;
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('payment-modal').style.display = 'none';
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
         }
     </script>
 </body>
 </html>
-
