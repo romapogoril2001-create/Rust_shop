@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Rust Shop</title>
+    <title>Evo Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg-dark: #0f1012;
             --card-gray: #1c1e22;
             --accent-blue: #3b82f6;
+            --main-green: #22c55e;
+            --main-red: #ef4444;
             --text-main: #ffffff;
             --text-gray: #9ca3af;
         }
@@ -19,70 +21,23 @@
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: 10px;
-            padding-bottom: 100px;
+            padding: 15px;
+            padding-bottom: 120px;
         }
 
-        .header { font-size: 20px; font-weight: 800; margin: 10px 0 15px 5px; }
-        
-        /* СІТКА У ДВА РЯДИ */
-        .grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; /* Робимо 2 колонки */
-            gap: 10px; 
-        }
+        .header { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-        /* КОМПАКТНА КАРТКА */
-        .product-card {
+        .card {
             background: var(--card-gray);
-            border-radius: 16px;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* МАЛЕНЬКЕ ПРЕВ'Ю СЕТУ */
-        .set-preview {
-            background: #e9e9e9;
-            border-radius: 12px;
-            padding: 8px;
+            border-radius: 20px;
+            padding: 12px;
             text-align: center;
-            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .set-title {
-            color: #000;
-            font-size: 10px; /* Дуже дрібний шрифт для назви в рамці */
-            font-weight: 800;
-            margin: 0 0 5px 0;
-            text-transform: lowercase;
-        }
-
-        .set-icons-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-        }
-
-        .set-icons-grid img {
-            width: 100%;
-            aspect-ratio: 1/1;
-        }
-
-        /* ОДИНОЧНЕ ФОТО (Білий сет) */
-        .single-img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-            border-radius: 12px;
-            background: #131416;
-            margin-bottom: 8px;
-        }
-
-        .price { font-size: 15px; font-weight: 800; margin: 5px 0 2px 0; }
-        .item-name { font-size: 13px; font-weight: 600; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .category { color: var(--text-gray); font-size: 10px; margin-bottom: 10px; }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 15px; background: #131416; margin-bottom: 10px; }
+        .price { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
 
         .btn-add {
             background: var(--accent-blue);
@@ -90,23 +45,107 @@
             border: none;
             width: 100%;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 12px;
         }
 
         .cart-bar {
             position: fixed;
             bottom: 20px; left: 15px; right: 15px;
             background: var(--accent-blue);
-            padding: 15px;
-            border-radius: 15px;
+            padding: 16px;
+            border-radius: 18px;
             display: none;
             justify-content: center;
+            z-index: 100;
             font-weight: 800;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Стилі модальних вікон */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-card {
+            background: var(--card-gray);
+            padding: 25px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 320px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        /* Список товарів у кошику */
+        #cart-items-list {
+            text-align: left;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 10px 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
             font-size: 14px;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-remove {
+            color: var(--main-red);
+            background: none;
+            border: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .card-number {
+            background: #131416;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            letter-spacing: 1px;
+        }
+
+        .btn-main {
+            background: var(--main-green);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 700;
+            margin: 15px 0 5px 0;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+
+        .btn-back {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -115,37 +154,52 @@
     <div class="header">Скіни Rust</div>
 
     <div class="grid">
-        
-        <div class="product-card">
-            <img src="https://raw.githubusercontent.com/romapogoril2001-create/Rust_shop/main/1776364638410.png" class="single-img">
-            <p class="price">500 грн.</p>
-            <p class="item-name">Білий сет</p>
-            <p class="category">Сети скінів</p>
-            <button class="btn-add" onclick="addItem('Білий сет', 500)">До кошика</button>
         </div>
-
-        <div class="product-card">
-            <div class="set-preview">
-                <h2 class="set-title">лісовий кофейний</h2>
-                <div class="set-icons-grid">
-                    <img src="https://files.facepunch.com/rust/item/pants.camo_512.png">
-                    <img src="https://files.facepunch.com/rust/item/hoodie.camo_512.png">
-                    <img src="https://files.facepunch.com/rust/item/jacket.camo_512.png">
-                    <img src="https://files.facepunch.com/rust/item/mask.balaclava_512.png">
-                    <img src="https://files.facepunch.com/rust/item/boots.camo_512.png">
-                    <img src="https://files.facepunch.com/rust/item/gloves.camo_512.png">
-                </div>
-            </div>
-            <p class="price">260 грн.</p>
-            <p class="item-name">Кофейний сет</p>
-            <p class="category">Сети скінів</p>
-            <button class="btn-add" onclick="addItem('Кофейний сет', 260)">До кошика</button>
+         <div class="card">
+            <img src="https://raw.githubusercontent.com/romapogoril2001-create/Rust_shop/main/1776364638410.png" alt="Зимовий білий сет">
+            <h3>Зимній білий сет</h3>
+            <div class="price">500 грн</div>
+            <button class="btn-add" onclick="addItem('Зимній білий сет', 500)">До кошика</button>
         </div>
-
+         <div class="card">
+            <img src="https://raw.githubusercontent.com/romapogoril2001-create/Rust_shop/main/IMG_20260420_181356_242.jpg" alt="Зимовий білий сет">
+            <h3>Зелений сет</h3>
+            <div class="price">200 грн</div>
+            <button class="btn-add" onclick="addItem('Зелений сет', 200)">До кошика</button>
+         </div>
+         <div class="card">
+            <img src="https://raw.githubusercontent.com/romapogoril2001-create/Rust_shop/main/IMG_20260421_001235.png" alt="Зимовий білий сет">
+            <h3>Чорний сет </h3>
+            <div class="price">450 грн</div>
+            <button class="btn-add" onclick="addItem('Чорний сет', 450)">До кошика</button>
+         </div>
     </div>
 
-    <div id="cart-btn" class="cart-bar" onclick="checkout()">
+    <div id="cart-btn" class="cart-bar" onclick="openCart()">
         ПЕРЕГЛЯНУТИ КОШИК (<span id="count">0</span>)
+    </div>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-card">
+            <h2 style="margin-top: 0;">Мій кошик</h2>
+            <div id="cart-items-list">
+                </div>
+            <p id="cart-total-price" style="font-weight: 800; font-size: 18px; margin: 10px 0;"></p>
+            <button class="btn-main" onclick="goToPayment()">Оформити замовлення</button>
+            <button onclick="closeModal('cart-modal')" class="btn-back">Продовжити покупки</button>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="modal">
+        <div class="modal-card">
+            <h2 style="margin-top: 0;">Оплата</h2>
+            <p style="color: var(--text-gray); font-size: 14px;">Перекажіть суму на карту:</p>
+            <div class="card-number">4441 1100 8094 2150</div>
+            <p id="final-price" style="font-weight: 800; font-size: 20px; margin: 10px 0;"></p>
+            <p style="font-size: 11px; color: var(--text-gray); margin-bottom: 5px;">Після оплати надішліть чек:</p>
+            <a href="https://t.me/roma_r3343" class="btn-main" style="background: var(--main-green);">Надіслати чек</a>
+            <button onclick="closeModal('payment-modal')" class="btn-back">Назад до кошика</button>
+        </div>
     </div>
 
     <script>
@@ -153,22 +207,61 @@
         tg.expand();
         let cart = [];
 
+        // Додавання товару
         function addItem(name, price) {
             cart.push({name, price});
-            document.getElementById('count').innerText = cart.length;
-            document.getElementById('cart-btn').style.display = 'flex';
+            updateCartButton();
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        function checkout() {
-            let total = cart.reduce((sum, item) => sum + item.price, 0);
-            tg.showConfirm(`Сума: ${total} грн. Оформити?`, (ok) => {
-                if (ok) {
-                    tg.sendData(JSON.stringify(cart));
-                }
+        // Оновлення лічильника на кнопці внизу
+        function updateCartButton() {
+            document.getElementById('count').innerText = cart.length;
+            document.getElementById('cart-btn').style.display = cart.length > 0 ? 'flex' : 'none';
+        }
+
+        // Відкриття вікна перегляду кошика
+        function openCart() {
+            const list = document.getElementById('cart-items-list');
+            list.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>${item.price} грн <button class="btn-remove" onclick="removeItem(${index})">✕</button></span>
+                    </div>
+                `;
             });
+
+            document.getElementById('cart-total-price').innerText = `Разом: ${total} грн`;
+            document.getElementById('cart-modal').style.display = 'flex';
+        }
+
+        // Видалення товару з кошика
+        function removeItem(index) {
+            cart.splice(index, 1);
+            if (cart.length === 0) {
+                closeModal('cart-modal');
+            } else {
+                openCart();
+            }
+            updateCartButton();
+        }
+
+        // Перехід до оплати
+        function goToPayment() {
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            closeModal('cart-modal');
+            document.getElementById('final-price').innerText = `До сплати: ${total} грн`;
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
         }
     </script>
 </body>
 </html>
-
